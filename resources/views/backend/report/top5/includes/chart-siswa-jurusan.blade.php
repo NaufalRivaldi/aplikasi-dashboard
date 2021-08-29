@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-12 text-center">
         <h6>
-            TOP5 REKAPTULASI SISWA AKTIF BERDASARKAN JURUSAN<br>
+            TOP 5 REKAPTULASI SISWA AKTIF BERDASARKAN JURUSAN<br>
             PERIODE: @{{ periode }}
         </h6>
     </div>
