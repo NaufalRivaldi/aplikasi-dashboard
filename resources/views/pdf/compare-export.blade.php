@@ -48,7 +48,7 @@
                 width: auto!important;
             }
 
-            .table-jurusan { width: 100% !important; font-size: .6em !important; }
+            /* .table-jurusan { width: 100% !important; font-size: .6em !important; } */
         }
     </style>
 </head>
@@ -80,7 +80,7 @@
 
         <section class="pagebrake mt-1">
             <!-- Start - Analisis chart siswa-jurusan -->
-            @include('backend.analisa.compare.includes.chart-siswa-jurusan')
+            @include('backend.analisa.compare.includes.chart-siswa-jurusan-5-table')
             <!-- End - Analisis chart siswa-jurusan -->
             <hr>
         </section>

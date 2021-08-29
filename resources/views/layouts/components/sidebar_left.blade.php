@@ -57,6 +57,16 @@
             </li>
             <!-- End - Materi collapse -->
             <!-- End - Master Link -->
+
+            <!-- Start - Pendidikan link -->
+            <li class="panel">
+                <li>
+                    <a href="{{ route('master.pendidikan.index') }}" class="@if(strpos(Route::currentRouteName(), 'pendidikan') !== false) active @endif">
+                        <i class="ti-book"></i> <span class="title">Pendidikan</span>
+                    </a>
+                </li>
+            </li>
+            <!-- End - Pendidikan link -->
             @endif
 
             @if(Auth::user()->level_id == 1 || Auth::user()->level_id == 2 || Auth::user()->level_id == 3 || Auth::user()->level_id == 5)

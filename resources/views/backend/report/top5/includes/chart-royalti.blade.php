@@ -11,7 +11,8 @@
     <div class="col-md-12">
         <chart-royalti :dataset="chartRoyalti.dataSets" :label="chartRoyalti.labels"></chart-royalti>
     </div>
-
+</div>
+<div class="row">
     <!-- Start - Table uang royalti -->
     <div class="col-md-12">
         <table class="table table-striped table-bordered defaultDatatable">

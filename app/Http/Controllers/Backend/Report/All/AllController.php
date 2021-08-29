@@ -847,7 +847,7 @@ class AllController extends Controller
 
             $result[] = [
                 'label'             => $materi->nama,
-                'backgroundColor'   => randomColor(),
+                'backgroundColor'   => $materi->warna,
                 'data'              => $total,
                 'stack'             => 'stack_1',
             ];
@@ -984,7 +984,7 @@ class AllController extends Controller
 
             $result[] = [
                 'label'             => $pendidikan->nama,
-                'backgroundColor'   => randomColor(),
+                'backgroundColor'   => $pendidikan->warna,
                 'data'              => $total,
                 'stack'             => 'stack_1'
             ];

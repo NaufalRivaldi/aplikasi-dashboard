@@ -22,7 +22,8 @@
     <div class="col-md-12">
         <chart-penerimaan :dataset="chartPenerimaan.dataSets" :label="labels"></chart-penerimaan>
     </div>
-
+</div>
+<div class="row">
     <!-- Start - Table uang penerimaan -->
     <div class="col-md-12">
         <table class="table table-striped table-bordered defaultDatatable">
