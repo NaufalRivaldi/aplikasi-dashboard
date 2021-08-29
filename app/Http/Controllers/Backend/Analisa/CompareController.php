@@ -1285,9 +1285,9 @@ class CompareController extends Controller
         // --------------------------------------------------------------------
         // init data collection for set data on array
         // --------------------------------------------------------------------
-        $cabangColl = collect(Cabang::select('id', 'nama')->get());
-        $wilayahColl = collect(Wilayah::select('id', 'nama')->get());
-        $subWilayahColl = collect(SubWilayah::select('id', 'nama')->get());
+        $cabangColl = Cabang::pluck('nama', 'id')->toArray();
+        $wilayahColl = Wilayah::pluck('nama', 'id')->toArray();
+        $subWilayahColl = SubWilayah::pluck('nama', 'id')->toArray();
         // --------------------------------------------------------------------
         // Make condition if filter with date or year
         // --------------------------------------------------------------------
@@ -1471,17 +1471,50 @@ class CompareController extends Controller
                         // -------------------------------------------------------
                         // Search cabang
                         // -------------------------------------------------------
-                        if($cabang != null) $location = $cabangColl->where('id', $row->cabang_id)->where('nama', $labelsArray[1])->first();
+                        if($cabang != null){
+                            if(isset($cabangColl[$row->cabang_id])){
+                                if($cabangColl[$row->cabang_id] == $labelsArray[1]){
+                                    $location = true;
+                                }else{
+                                    $location = false;
+                                }
+                            }else{
+                                $location = false;
+                            }
+                            // $location = $cabangColl->where('id', $row->cabang_id)->where('nama', $labelsArray[1])->first();
+                        }
                         // -------------------------------------------------------
                         // Search wilayah
                         // -------------------------------------------------------
-                        if($wilayah != null) $location = $wilayahColl->where('id', $row->wilayah_id)->where('nama', $labelsArray[1])->first();
+                        if($wilayah != null){
+                            if(isset($wilayahColl[$row->wilayah_id])){
+                                if($wilayahColl[$row->wilayah_id] == $labelsArray[1]){
+                                    $location = true;
+                                }else{
+                                    $location = false;
+                                }
+                            }else{
+                                $location = false;
+                            }
+                            // $location = $wilayahColl->where('id', $row->wilayah_id)->where('nama', $labelsArray[1])->first();
+                        }
                         // -------------------------------------------------------
                         // Search sub wilayah
                         // -------------------------------------------------------
-                        if($subWilayah != null) $location = $subWilayahColl->where('id', $row->sub_wilayah_id)->where('nama', $labelsArray[1])->first();
+                        if($subWilayah != null){
+                            if(isset($subWilayahColl[$row->sub_wilayah_id])){
+                                if($subWilayahColl[$row->sub_wilayah_id] == $labelsArray[1]){
+                                    $location = true;
+                                }else{
+                                    $location = false;
+                                }
+                            }else{
+                                $location = false;
+                            }
+                            // $location = $subWilayahColl->where('id', $row->sub_wilayah_id)->where('nama', $labelsArray[1])->first();
+                        }
                         // -------------------------------------------------------
-                        if($row->bulan == $bulan && $row->tahun == $tahun && $row->materi_id == $materi->id && $location != null){
+                        if($row->bulan == $bulan && $row->tahun == $tahun && $row->materi_id == $materi->id && $location == true){
                             $total[] = (int)$row->total_jumlah;
                             $status = false;
                         }
@@ -1502,17 +1535,50 @@ class CompareController extends Controller
                         // -------------------------------------------------------
                         // Search cabang
                         // -------------------------------------------------------
-                        if($cabang != null) $location = $cabangColl->where('id', $row->cabang_id)->where('nama', $labelsArray[1])->first();
+                        if($cabang != null){
+                            if(isset($cabangColl[$row->cabang_id])){
+                                if($cabangColl[$row->cabang_id] == $labelsArray[1]){
+                                    $location = true;
+                                }else{
+                                    $location = false;
+                                }
+                            }else{
+                                $location = false;
+                            }
+                            // $location = $cabangColl->where('id', $row->cabang_id)->where('nama', $labelsArray[1])->first();
+                        }
                         // -------------------------------------------------------
                         // Search wilayah
                         // -------------------------------------------------------
-                        if($wilayah != null) $location = $wilayahColl->where('id', $row->wilayah_id)->where('nama', $labelsArray[1])->first();
+                        if($wilayah != null){
+                            if(isset($wilayahColl[$row->wilayah_id])){
+                                if($wilayahColl[$row->wilayah_id] == $labelsArray[1]){
+                                    $location = true;
+                                }else{
+                                    $location = false;
+                                }
+                            }else{
+                                $location = false;
+                            }
+                            // $location = $wilayahColl->where('id', $row->wilayah_id)->where('nama', $labelsArray[1])->first();
+                        }
                         // -------------------------------------------------------
                         // Search sub wilayah
                         // -------------------------------------------------------
-                        if($subWilayah != null) $location = $subWilayahColl->where('id', $row->sub_wilayah_id)->where('nama', $labelsArray[1])->first();
+                        if($subWilayah != null){
+                            if(isset($subWilayahColl[$row->sub_wilayah_id])){
+                                if($subWilayahColl[$row->sub_wilayah_id] == $labelsArray[1]){
+                                    $location = true;
+                                }else{
+                                    $location = false;
+                                }
+                            }else{
+                                $location = false;
+                            }
+                            // $location = $subWilayahColl->where('id', $row->sub_wilayah_id)->where('nama', $labelsArray[1])->first();
+                        }
                         // -------------------------------------------------------
-                        if($row->tahun == $tahun && $row->materi_id == $materi->id && $location != null){
+                        if($row->tahun == $tahun && $row->materi_id == $materi->id && $location == true){
                             $total[] = (int)$row->total_jumlah;
                             $status = false;
                         }
@@ -1543,9 +1609,9 @@ class CompareController extends Controller
         // --------------------------------------------------------------------
         // init data collection for set data on array
         // --------------------------------------------------------------------
-        $cabangColl = collect(Cabang::select('id', 'nama')->get());
-        $wilayahColl = collect(Wilayah::select('id', 'nama')->get());
-        $subWilayahColl = collect(SubWilayah::select('id', 'nama')->get());
+        $cabangColl = Cabang::pluck('nama', 'id')->toArray();
+        $wilayahColl = Wilayah::pluck('nama', 'id')->toArray();
+        $subWilayahColl = SubWilayah::pluck('nama', 'id')->toArray();
         // --------------------------------------------------------------------
         // Make condition if filter with date or year
         // --------------------------------------------------------------------
@@ -1732,17 +1798,50 @@ class CompareController extends Controller
                         // -------------------------------------------------------
                         // Search cabang
                         // -------------------------------------------------------
-                        if($cabang != null) $location = $cabangColl->where('id', $row->cabang_id)->where('nama', $labelsArray[1])->first();
+                        if($cabang != null){
+                            if(isset($cabangColl[$row->cabang_id])){
+                                if($cabangColl[$row->cabang_id] == $labelsArray[1]){
+                                    $location = true;
+                                }else{
+                                    $location = false;
+                                }
+                            }else{
+                                $location = false;
+                            }
+                            // $location = $cabangColl->where('id', $row->cabang_id)->where('nama', $labelsArray[1])->first();
+                        }
                         // -------------------------------------------------------
                         // Search wilayah
                         // -------------------------------------------------------
-                        if($wilayah != null) $location = $wilayahColl->where('id', $row->wilayah_id)->where('nama', $labelsArray[1])->first();
+                        if($wilayah != null){
+                            if(isset($wilayahColl[$row->wilayah_id])){
+                                if($wilayahColl[$row->wilayah_id] == $labelsArray[1]){
+                                    $location = true;
+                                }else{
+                                    $location = false;
+                                }
+                            }else{
+                                $location = false;
+                            }
+                            // $location = $wilayahColl->where('id', $row->wilayah_id)->where('nama', $labelsArray[1])->first();
+                        }
                         // -------------------------------------------------------
                         // Search sub wilayah
                         // -------------------------------------------------------
-                        if($subWilayah != null) $location = $subWilayahColl->where('id', $row->sub_wilayah_id)->where('nama', $labelsArray[1])->first();
+                        if($subWilayah != null){
+                            if(isset($subWilayahColl[$row->sub_wilayah_id])){
+                                if($subWilayahColl[$row->sub_wilayah_id] == $labelsArray[1]){
+                                    $location = true;
+                                }else{
+                                    $location = false;
+                                }
+                            }else{
+                                $location = false;
+                            }
+                            // $location = $subWilayahColl->where('id', $row->sub_wilayah_id)->where('nama', $labelsArray[1])->first();
+                        }
                         // -------------------------------------------------------
-                        if($row->bulan == $bulan && $row->tahun == $tahun && $row->pendidikan_id == $pendidikan->id && $location != null){
+                        if($row->bulan == $bulan && $row->tahun == $tahun && $row->pendidikan_id == $pendidikan->id && $location == true){
                             $total[] = (int)$row->total_jumlah;
                             $status = false;
                         }
@@ -1763,17 +1862,50 @@ class CompareController extends Controller
                         // -------------------------------------------------------
                         // Search cabang
                         // -------------------------------------------------------
-                        if($cabang != null) $location = $cabangColl->where('id', $row->cabang_id)->where('nama', $labelsArray[1])->first();
+                        if($cabang != null){
+                            if(isset($cabangColl[$row->cabang_id])){
+                                if($cabangColl[$row->cabang_id] == $labelsArray[1]){
+                                    $location = true;
+                                }else{
+                                    $location = false;
+                                }
+                            }else{
+                                $location = false;
+                            }
+                            // $location = $cabangColl->where('id', $row->cabang_id)->where('nama', $labelsArray[1])->first();
+                        }
                         // -------------------------------------------------------
                         // Search wilayah
                         // -------------------------------------------------------
-                        if($wilayah != null) $location = $wilayahColl->where('id', $row->wilayah_id)->where('nama', $labelsArray[1])->first();
+                        if($wilayah != null){
+                            if(isset($cabangColl[$row->wilayah_id])){
+                                if($cabangColl[$row->wilayah_id] == $labelsArray[1]){
+                                    $location = true;
+                                }else{
+                                    $location = false;
+                                }
+                            }else{
+                                $location = false;
+                            }
+                            // $location = $wilayahColl->where('id', $row->wilayah_id)->where('nama', $labelsArray[1])->first();
+                        }
                         // -------------------------------------------------------
                         // Search sub wilayah
                         // -------------------------------------------------------
-                        if($subWilayah != null) $location = $subWilayahColl->where('id', $row->sub_wilayah_id)->where('nama', $labelsArray[1])->first();
+                        if($subWilayah != null){
+                            if(isset($cabangColl[$row->sub_wilayah_id])){
+                                if($cabangColl[$row->sub_wilayah_id] == $labelsArray[1]){
+                                    $location = true;
+                                }else{
+                                    $location = false;
+                                }
+                            }else{
+                                $location = false;
+                            }
+                            // $location = $subWilayahColl->where('id', $row->sub_wilayah_id)->where('nama', $labelsArray[1])->first();
+                        }
                         // -------------------------------------------------------
-                        if($row->tahun == $tahun && $row->pendidikan_id == $pendidikan->id && $location != null){
+                        if($row->tahun == $tahun && $row->pendidikan_id == $pendidikan->id && $location == true){
                             $total[] = (int)$row->total_jumlah;
                             $status = false;
                         }

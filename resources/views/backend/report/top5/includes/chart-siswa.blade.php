@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-12 text-center">
         <h6>
-            UNDER 5 SUMMARY SISWA AKTIF<br>
+            TOP 5 SUMMARY SISWA AKTIF<br>
             PERIODE: @{{ periode }}
         </h6>
     </div>

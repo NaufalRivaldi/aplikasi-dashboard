@@ -419,7 +419,7 @@ class Top5Controller extends Controller
     // ------------------------------------------------------------------------
     public function getDataSetSiswaAktifJurusan($periode, $year = null){
         // --------------------------------------------------------------------
-        $cabangColl = Cabang::all();
+        $cabangColl = Cabang::pluck('nama', 'id')->toArray();
         // --------------------------------------------------------------------
         // Set periode
         // --------------------------------------------------------------------
@@ -499,8 +499,16 @@ class Top5Controller extends Controller
             // --------------------------------------------------------------------
             for($i = 0; $i < count($labels); $i++){
                 foreach($data as $row){
-                    $location = $cabangColl->where('id', $row->cabang_id)->where('nama', $labels[$i])->first();
-                    if($row->materi_id == $materi->id && $location != null){
+                    if(isset($cabangColl[$row->cabang_id])){
+                        if($cabangColl[$row->cabang_id] == $labels[1]){
+                            $location = true;
+                        }else{
+                            $location = false;
+                        }
+                    }else{
+                        $location = false;
+                    }
+                    if($row->materi_id == $materi->id && $location == true){
                         $total[] = (int)$row->total_jumlah;
                     }
                 }
@@ -527,7 +535,7 @@ class Top5Controller extends Controller
     // ------------------------------------------------------------------------
     public function getDataSetSiswaAktifpendidikan($periode, $year = null){
         // --------------------------------------------------------------------
-        $cabangColl = Cabang::all();
+        $cabangColl = Cabang::pluck('nama', 'id')->toArray();
         // --------------------------------------------------------------------
         // Set periode
         // --------------------------------------------------------------------
@@ -607,7 +615,16 @@ class Top5Controller extends Controller
             // --------------------------------------------------------------------
             for($i = 0; $i < count($labels); $i++){
                 foreach($data as $row){
-                    $location = $cabangColl->where('id', $row->cabang_id)->where('nama', $labels[$i])->first();
+                    if(isset($cabangColl[$row->cabang_id])){
+                        if($cabangColl[$row->cabang_id] == $labels[1]){
+                            $location = true;
+                        }else{
+                            $location = false;
+                        }
+                    }else{
+                        $location = false;
+                    }
+
                     if($row->pendidikan_id == $pendidikan->id && $location != null){
                         $total[] = (int)$row->total_jumlah;
                     }
