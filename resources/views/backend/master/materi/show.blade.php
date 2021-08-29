@@ -21,7 +21,7 @@
                     <div class="row mt-2">
                         <div class="col-sm-2 font-weight-bold">Kategori</div>
                         <div class="col-sm-1 text-right">:</div>
-                        <div class="col-sm-9">{{ $materi->kategori->nama }}</div>
+                        <div class="col-sm-9">{{ $materi->kategori ? $materi->kategori->nama : '-' }}</div>
                     </div>
                     <div class="row mt-2">
                         <div class="col-sm-2 font-weight-bold">Status</div>
@@ -120,7 +120,7 @@
 
                                     <tbody v-else>
                                         <tr>
-                                            <td colspan="4" class="text-center">Tidak ada data grade</td>
+                                            <td colspan="5" class="text-center">Tidak ada data grade</td>
                                         </tr>
                                     </tbody>
 

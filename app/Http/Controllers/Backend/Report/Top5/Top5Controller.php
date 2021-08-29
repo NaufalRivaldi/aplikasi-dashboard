@@ -347,7 +347,7 @@ class Top5Controller extends Controller
         // --------------------------------------------------------------------
         // Order by data
         // --------------------------------------------------------------------
-        $query->orderBy('total', 'desc');
+        $query->orderBy('siswa_aktif', 'desc');
         // --------------------------------------------------------------------
         // Group by data
         // --------------------------------------------------------------------
@@ -500,7 +500,7 @@ class Top5Controller extends Controller
             for($i = 0; $i < count($labels); $i++){
                 foreach($data as $row){
                     if(isset($cabangColl[$row->cabang_id])){
-                        if($cabangColl[$row->cabang_id] == $labels[1]){
+                        if($cabangColl[$row->cabang_id] == $labels[$i]){
                             $location = true;
                         }else{
                             $location = false;
@@ -516,7 +516,7 @@ class Top5Controller extends Controller
             
             $result[] = [
                 'label'             => $materi->nama,
-                'backgroundColor'   => randomColor(),
+                'backgroundColor'   => $materi->warna,
                 'data'              => $total,
                 'stack'             => 'stack_1',
             ];
@@ -616,7 +616,7 @@ class Top5Controller extends Controller
             for($i = 0; $i < count($labels); $i++){
                 foreach($data as $row){
                     if(isset($cabangColl[$row->cabang_id])){
-                        if($cabangColl[$row->cabang_id] == $labels[1]){
+                        if($cabangColl[$row->cabang_id] == $labels[$i]){
                             $location = true;
                         }else{
                             $location = false;
@@ -633,7 +633,7 @@ class Top5Controller extends Controller
             
             $result[] = [
                 'label'             => $pendidikan->nama,
-                'backgroundColor'   => randomColor(),
+                'backgroundColor'   => $pendidikan->warna,
                 'data'              => $total,
                 'stack'             => 'stack_1',
             ];

@@ -1,13 +1,13 @@
 @extends('layouts.content_form')
 
 @section('content-form')
-<form action="{{ $materi->id == null ? route('master.materi.store') : route('master.materi.update', $materi->id) }}" method="POST">
+<form action="{{ $pendidikan->id == null ? route('master.pendidikan.store') : route('master.pendidikan.update', $pendidikan->id) }}" method="POST">
     @csrf
-    @if($materi->id != null)
+    @if($pendidikan->id != null)
         @method('PUT')
     @endif
     <!-- Start - Hidden input -->
-    <input type="hidden" name="id" value="{{ $materi->id }}">
+    <input type="hidden" name="id" value="{{ $pendidikan->id }}">
     <!-- End - Hidden input -->
 
     <!-- Start - Nama -->
@@ -17,7 +17,7 @@
             <div class="label-form">Nama</div>
         </label>
         <div class="col-sm-10 input-form">
-            <input type="text" name="nama" class="form-control @if($errors->has('nama')) is-invalid @endif" value="{{ $materi->nama ? $materi->nama : old('nama') }}">
+            <input type="text" name="nama" class="form-control @if($errors->has('nama')) is-invalid @endif" value="{{ $pendidikan->nama ? $pendidikan->nama : old('nama') }}">
             <!-- Start - Error handling -->
             @if($errors->has('nama'))
                 <div class="invalid-feedback">{{ $errors->first('nama') }}</div>
@@ -27,28 +27,6 @@
     </div>
     <!-- End - Nama -->
 
-    <!-- Start - kategori_id -->
-    <div class="form-group row">
-        <label class="col-sm-2 col-form-label">
-            <span class="badge badge-success">Optional</span><br>
-            <div class="label-form">Kategori</div>
-        </label>
-        <div class="col-sm-10 input-form">
-            <select name="kategori_id" class="form-control select2 @if($errors->has('kategori_id')) is-invalid @endif">
-                <option value="">Pilih</option>
-                @foreach($kategori as $id => $value)
-                    <option value="{{ $id }}" @if($id == $materi->kategori_id) selected @endif>{{ $value }}</option>
-                @endforeach
-            </select>
-            <!-- Start - Error handling -->
-            @if($errors->has('kategori_id'))
-                <div class="invalid-feedback">{{ $errors->first('kategori_id') }}</div>
-            @endif
-            <!-- End - Error handling -->
-        </div>
-    </div>
-    <!-- End - kategori_id -->
-
     <!-- Start - warna -->
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">
@@ -56,7 +34,7 @@
             <div class="label-form">Warna</div>
         </label>
         <div class="col-sm-10 input-form">
-            <input type="color" id="warna" class="form-control @if($errors->has('warna')) is-invalid @endif col-2" name="warna" value="{{ $materi->warna ? $materi->warna : old('warna') }}">
+            <input type="color" id="warna" class="form-control @if($errors->has('warna')) is-invalid @endif col-2" name="warna" value="{{ $pendidikan->warna ? $pendidikan->warna : old('warna') }}">
             <!-- Start - Error handling -->
             @if($errors->has('warna'))
                 <div class="invalid-feedback">{{ $errors->first('warna') }}</div>
@@ -80,7 +58,7 @@
 @endsection
 
 @section('card-button-footer')
-<a href="{{ route('master.materi.index') }}" class="btn btn-info">
+<a href="{{ route('master.pendidikan.index') }}" class="btn btn-info">
     <i class="ti-arrow-circle-left"></i> Kembali
 </a>
 @endsection
@@ -94,7 +72,7 @@
         // ------------------------------------------------------------------------
         el: '#app',
         // ------------------------------------------------------------------------
-        // Data for materi page
+        // Data for pendidikan page
         // ------------------------------------------------------------------------
         data: {
             //
@@ -102,7 +80,7 @@
         // ------------------------------------------------------------------------
 
         // ------------------------------------------------------------------------
-        // Methods for materi page
+        // Methods for pendidikan page
         // ------------------------------------------------------------------------
         methods: {
             //
@@ -110,7 +88,7 @@
         // ------------------------------------------------------------------------
 
         // ------------------------------------------------------------------------
-        // Mounted for materi page
+        // Mounted for pendidikan page
         // ------------------------------------------------------------------------
         mounted() {
             // --------------------------------------------------------------------

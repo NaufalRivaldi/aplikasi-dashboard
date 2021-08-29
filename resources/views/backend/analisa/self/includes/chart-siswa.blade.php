@@ -22,7 +22,8 @@
     <div class="col-md-12">
         <chart-siswa :dataset="chartSiswaAktif.dataSets" :label="labels"></chart-siswa>
     </div>
-
+</div>
+<div class="row">
     <!-- Start - Table uang siswa -->
     <div class="col-md-12">
         <table class="table table-striped table-bordered defaultDatatable">

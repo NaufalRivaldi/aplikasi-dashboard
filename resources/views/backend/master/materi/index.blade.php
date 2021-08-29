@@ -6,6 +6,7 @@
 
 @section('content-table')
     <th>Nama</th>
+    <th data-type="none">Warna Chart</th>
     <th data-type="select" data-filtering='{!! parseJson($filtering->kategori) !!}'>Kategori</th>
     <th data-type="select" data-filtering='{!! parseJson($filtering->status) !!}'>Status</th>
     <th data-type="none">Jumlah Grade</th>
@@ -16,6 +17,7 @@
 @php
     $column = [
         ["data" => "nama", "name" => "nama", "defaultContent" => "-"],
+        ["data" => "warna", "name" => "warna", "defaultContent" => "-"],
         ["data" => "kategori.nama", "name" => "kategori.nama", "defaultContent" => "-"],
         ["data" => "status", "name" => "status", "defaultContent" => "-"],
         ["data" => "materi_grades_count", "name" => "materi_grades_count", "defaultContent" => "-"],

@@ -11,7 +11,8 @@
     <div class="col-md-12">
         <chart-siswa :dataset="chartSiswaAktifPendidikan.dataSets" :label="chartSiswaAktifPendidikan.labels"></chart-siswa>
     </div>
-
+</div>
+<div class="row">
     <!-- Start - Table uang siswa -->
     <div class="col-md-12">
         <div class="table-responsive">

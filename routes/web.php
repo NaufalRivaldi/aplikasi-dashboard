@@ -122,6 +122,15 @@ Route::namespace('Backend')->middleware('auth')->group(function(){
             Route::put('update-status/{type}/{id}', 'GradeController@updateStatus')->name('grade.update.status');
         });
         // ----------------------------------------------------------------
+
+        // ----------------------------------------------------------------
+        //  Pendidikan page
+        // ----------------------------------------------------------------
+        Route::resource('pendidikan', 'PendidikanController');
+        Route::prefix('pendidikan')->group(function(){
+            Route::get('json/{param}', 'PendidikanController@json')->name('pendidikan.json');
+        });
+        // ----------------------------------------------------------------
     });
     // --------------------------------------------------------------------
 

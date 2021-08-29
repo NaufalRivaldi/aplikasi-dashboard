@@ -61,6 +61,10 @@ class MateriController extends Controller
                                     return statusButton($row->status, $row->id);
                                 });
                 // ------------------------------------------------------------
+                $datatable = $datatable->addColumn('warna', function($row){
+                    return "<div style='width: 25px; height: 25px; background-color: ".$row->warna."; border-radius: 3px'></div>";
+                });
+                // ------------------------------------------------------------
                 $datatable = $datatable->addColumn('action', function($row){
                                     $button = '<div class="btn-group" role="group" aria-label="Basic example">';
                                     $button .= '<a href="'.route('master.materi.show', $row->id).'" class="btn btn-sm btn-info" title="Lihat materi"><i class="ti-eye"></i></a>';
@@ -84,7 +88,7 @@ class MateriController extends Controller
                                     $query->where('status', $val);
                                 });
                 // ------------------------------------------------------------
-                return $datatable->rawColumns(['status', 'action'])->make(true);
+                return $datatable->rawColumns(['status', 'warna', 'action'])->make(true);
                 // ------------------------------------------------------------                                    
                 break;
             // ----------------------------------------------------------------
@@ -130,7 +134,8 @@ class MateriController extends Controller
         // --------------------------------------------------------------------
         Validator::make($request->all(), [
             'nama'              => 'required|max:191',
-            'kategori_id'       => 'required',
+            'kategori_id'       => 'nullable',
+            'warna'             => 'required',
         ])->validate();
         // --------------------------------------------------------------------
 
@@ -268,7 +273,8 @@ class MateriController extends Controller
         // --------------------------------------------------------------------
         Validator::make($request->all(), [
             'nama'              => 'required|max:191',
-            'kategori_id'       => 'required',
+            'kategori_id'       => 'nullable',
+            'warna'             => 'required',
         ])->validate();
         // --------------------------------------------------------------------
 
@@ -282,6 +288,7 @@ class MateriController extends Controller
             $materi                 = Materi::findOrFail($id);
             $materi->nama           = $data['nama'];
             $materi->kategori_id    = $data['kategori_id'];
+            $materi->warna          = $data['warna'];
             $materi->save();
             // ----------------------------------------------------------------
             return redirect()->route('master.materi.index')->with('success', __('label.SUCCESS_UPDATE_MESSAGE'));
