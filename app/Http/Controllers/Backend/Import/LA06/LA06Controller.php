@@ -186,44 +186,54 @@ class LA06Controller extends Controller
                 return redirect()->route('import.la06.import')->with('danger', __('Cabang tidak sesuai dengan user, silahkan masukkan data dengan cabang yang benar'));
             }
             // ----------------------------------------------------------------
-            // Check siswa aktif
+
             // ----------------------------------------------------------------
-            $siswaAktif = SiswaAktif::where('bulan', $vwSiswaAktifs->random()->bulan)->where('tahun', $vwSiswaAktifs->random()->tahun)->where('cabang_id', $cabang->id)->first();
-            // ------------------------------------------------------------
-            if(empty($siswaAktif)){
-                $siswaAktif = SiswaAktif::create([
-                    'bulan'         => $vwSiswaAktifs->random()->bulan,
-                    'tahun'         => $vwSiswaAktifs->random()->tahun,
-                    'user_id'       => Auth::user()->id,
-                    'cabang_id'     => $cabang->id,
-                ]);
-            }else{
-                SiswaAktifDetail::where('siswa_aktif_id', $siswaAktif->id)->delete();
-            }
-            // ------------------------------------------------------------
-            // Insert data Penjualan Detail
-            // ------------------------------------------------------------
-            foreach($vwSiswaAktifs as $vwSiswaAktif){
-                $materi = Materi::where('nama', $vwSiswaAktif->materi)->first();
-                if(empty($materi)){
-                    $materi = Materi::create([
-                        'nama' => $vwSiswaAktif->materi,
-                        'status' => 1,
-                        'kategori_id' => null,
+            // Check Materi first
+            // ----------------------------------------------------------------
+            $checkMateri = $this->checkMateri($vwSiswaAktifs, $file->getClientOriginalName());
+            if($checkMateri['status'] == true){
+                // ----------------------------------------------------------------
+                // Check siswa aktif
+                // ----------------------------------------------------------------
+                $siswaAktif = SiswaAktif::where('bulan', $vwSiswaAktifs->random()->bulan)->where('tahun', $vwSiswaAktifs->random()->tahun)->where('cabang_id', $cabang->id)->first();
+                // ------------------------------------------------------------
+                if(empty($siswaAktif)){
+                    $siswaAktif = SiswaAktif::create([
+                        'bulan'         => $vwSiswaAktifs->random()->bulan,
+                        'tahun'         => $vwSiswaAktifs->random()->tahun,
+                        'user_id'       => Auth::user()->id,
+                        'cabang_id'     => $cabang->id,
+                    ]);
+                }else{
+                    SiswaAktifDetail::where('siswa_aktif_id', $siswaAktif->id)->delete();
+                }
+                // ------------------------------------------------------------
+                // Insert data Penjualan Detail
+                // ------------------------------------------------------------
+                foreach($vwSiswaAktifs as $vwSiswaAktif){
+                    $materi = Materi::where('nama', $vwSiswaAktif->materi)->first();
+                    if(empty($materi)){
+                        $materi = Materi::create([
+                            'nama' => $vwSiswaAktif->materi,
+                            'status' => 1,
+                            'kategori_id' => null,
+                        ]);
+                    }
+                    // --------------------------------------------------------
+                    SiswaAktifDetail::create([
+                        'jumlah'            => $vwSiswaAktif->jumlah,
+                        'materi_id'         => $materi->id,
+                        'siswa_aktif_id'    => $siswaAktif->id,
+                        'materi_grade_id'   => null,
                     ]);
                 }
-                // --------------------------------------------------------
-                SiswaAktifDetail::create([
-                    'jumlah'            => $vwSiswaAktif->jumlah,
-                    'materi_id'         => $materi->id,
-                    'siswa_aktif_id'    => $siswaAktif->id,
-                    'materi_grade_id'   => null,
-                ]);
+                // ----------------------------------------------------------------
+                
+                // ----------------------------------------------------------------
+                return redirect()->route('import.la06.index')->with('success', __('label.SUCCESS_CREATE_MESSAGE'));
+            }else{
+                return redirect()->route('import.la06.import')->with('warning', $checkMateri['text']);
             }
-            // ----------------------------------------------------------------
-            
-            // ----------------------------------------------------------------
-            return redirect()->route('import.la06.index')->with('success', __('label.SUCCESS_CREATE_MESSAGE'));
             // ----------------------------------------------------------------
         } catch (\Throwable $th) {
             return redirect()->route('import.la06.import')->with('danger', 'Format CSV tidak sesuai!');
@@ -274,6 +284,33 @@ class LA06Controller extends Controller
         // --------------------------------------------------------------------
         if($valArray[1] != "LA06") return true;
         else return false;
+    }
+    // ------------------------------------------------------------------------
+
+    // ------------------------------------------------------------------------
+    // Check materi function
+    // ------------------------------------------------------------------------
+    private function checkMateri($collections, $fileName){
+        $errName = [];
+        $materis = Materi::pluck('nama')->toArray();
+        foreach($collections as $data){
+            if(!in_array($data->materi, $materis)){
+                if(!in_array($data->materi, $errName)) $errName[] = $data->materi;
+            }
+        }
+        // Count err name, if > 0 show alert
+        if(count($errName) > 0){
+            $text = "Materi (".implode(", ", $errName).") tidak sesuai dengan sistem, harap hubungi admin untuk penyesuaian penamaan materi pada ".$fileName.".";
+            return [
+                'text' => $text,
+                'status' => false,
+            ];
+        }else{
+            return [
+                'text' => null,
+                'status' => true,
+            ];
+        }
     }
     // ------------------------------------------------------------------------
 }

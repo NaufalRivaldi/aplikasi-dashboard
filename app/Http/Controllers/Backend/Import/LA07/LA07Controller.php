@@ -186,42 +186,53 @@ class LA07Controller extends Controller
                 return redirect()->route('import.la07.import')->with('danger', __('Cabang tidak sesuai dengan user, silahkan masukkan data dengan cabang yang benar'));
             }
             // ----------------------------------------------------------------
-            // Check siswa aktif
+
             // ----------------------------------------------------------------
-            $siswaAktif = SiswaAktif::where('bulan', $vwSiswaAktifs->random()->bulan)->where('tahun', $vwSiswaAktifs->random()->tahun)->where('cabang_id', $cabang->id)->first();
-            // ------------------------------------------------------------
-            if(empty($siswaAktif)){
-                $siswaAktif = SiswaAktif::create([
-                    'bulan'         => $vwSiswaAktifs->random()->bulan,
-                    'tahun'         => $vwSiswaAktifs->random()->tahun,
-                    'user_id'       => Auth::user()->id,
-                    'cabang_id'     => $cabang->id,
-                ]);
-            }else{
-                SiswaAktifDetail::where('siswa_aktif_pendidikan_id', $siswaAktif->id)->delete();
-            }
-            // ------------------------------------------------------------
-            // Insert data siswa aktif detail
-            // ------------------------------------------------------------
-            foreach($vwSiswaAktifs as $vwSiswaAktif){
-                $pendidikan = Pendidikan::where('nama', $vwSiswaAktif->pendidikan)->first();
-                if(empty($pendidikan)){
-                    $pendidikan = Pendidikan::create([
-                        'nama' => $vwSiswaAktif->pendidikan,
-                        'status' => 1,
+            // Check Pendidikan first
+            // ----------------------------------------------------------------
+            $checkPendidikan = $this->checkPendidikan($vwSiswaAktifs, $file->getClientOriginalName());
+            if($checkPendidikan['status'] == true){
+                // ----------------------------------------------------------------
+                // Check siswa aktif
+                // ----------------------------------------------------------------
+                $siswaAktif = SiswaAktif::where('bulan', $vwSiswaAktifs->random()->bulan)->where('tahun', $vwSiswaAktifs->random()->tahun)->where('cabang_id', $cabang->id)->first();
+                // ------------------------------------------------------------
+                if(empty($siswaAktif)){
+                    $siswaAktif = SiswaAktif::create([
+                        'bulan'         => $vwSiswaAktifs->random()->bulan,
+                        'tahun'         => $vwSiswaAktifs->random()->tahun,
+                        'user_id'       => Auth::user()->id,
+                        'cabang_id'     => $cabang->id,
+                    ]);
+                }else{
+                    SiswaAktifDetail::where('siswa_aktif_pendidikan_id', $siswaAktif->id)->delete();
+                }
+                // ------------------------------------------------------------
+                // Insert data siswa aktif detail
+                // ------------------------------------------------------------
+                foreach($vwSiswaAktifs as $vwSiswaAktif){
+                    $pendidikan = Pendidikan::where('nama', $vwSiswaAktif->pendidikan)->first();
+                    if(empty($pendidikan)){
+                        $pendidikan = Pendidikan::create([
+                            'nama' => $vwSiswaAktif->pendidikan,
+                            'status' => 1,
+                        ]);
+                    }
+                    // --------------------------------------------------------
+                    SiswaAktifDetail::create([
+                        'jumlah'                    => $vwSiswaAktif->jumlah,
+                        'pendidikan_id'             => $pendidikan->id,
+                        'siswa_aktif_pendidikan_id' => $siswaAktif->id,
                     ]);
                 }
-                // --------------------------------------------------------
-                SiswaAktifDetail::create([
-                    'jumlah'                    => $vwSiswaAktif->jumlah,
-                    'pendidikan_id'             => $pendidikan->id,
-                    'siswa_aktif_pendidikan_id' => $siswaAktif->id,
-                ]);
+                // ------------------------------------------------------------
+                
+                // ----------------------------------------------------------------
+                return redirect()->route('import.la07.index')->with('success', __('label.SUCCESS_CREATE_MESSAGE'));
+                // ----------------------------------------------------------------
+            }else{
+                return redirect()->route('import.la06.import')->with('warning', $checkPendidikan['text']);
             }
-            // ------------------------------------------------------------
-            
-            // ----------------------------------------------------------------
-            return redirect()->route('import.la07.index')->with('success', __('label.SUCCESS_CREATE_MESSAGE'));
             // ----------------------------------------------------------------
         } catch (\Throwable $th) {
             return redirect()->route('import.la07.import')->with('danger', 'Format CSV tidak sesuai!');
@@ -272,6 +283,33 @@ class LA07Controller extends Controller
         // --------------------------------------------------------------------
         if($valArray[1] != "LA07") return true;
         else return false;
+    }
+    // ------------------------------------------------------------------------
+
+    // ------------------------------------------------------------------------
+    // Check pendidikan function
+    // ------------------------------------------------------------------------
+    private function checkPendidikan($collections, $fileName){
+        $errName = [];
+        $pendidikans = Pendidikan::pluck('nama')->toArray();
+        foreach($collections as $data){
+            if(!in_array($data->pendidikan, $pendidikans)){
+                if(!in_array($data->pendidikan, $errName)) $errName[] = $data->pendidikan;
+            }
+        }
+        // Count err name, if > 0 show alert
+        if(count($errName) > 0){
+            $text = "Pendidikan (".implode(", ", $errName).") tidak sesuai dengan sistem, harap hubungi admin untuk penyesuaian penamaan pendidikan pada ".$fileName.".";
+            return [
+                'text' => $text,
+                'status' => false,
+            ];
+        }else{
+            return [
+                'text' => null,
+                'status' => true,
+            ];
+        }
     }
     // ------------------------------------------------------------------------
 }
